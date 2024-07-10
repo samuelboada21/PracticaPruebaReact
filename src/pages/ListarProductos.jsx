@@ -36,25 +36,25 @@ const ProductosList = () => {
     }
   };
 
-  const headers = ["ID", "Nombre", "Valor"];
+  const headers = ["ID", "Nombre", "Precio"];
 
   const data = productos.map((producto) => [
     producto.id,
     producto.nombre,
-    producto.valor,
+    producto.precio,
   ]);
 
   return (
     <Center>
       <Box mt="60px">
-        <Button onClick={() => navigate("/agregar")} colorScheme="teal" mb={4}>
+        <Button onClick={() => navigate("agregar")} bg="purple.800" _hover={"none"} mb={4}>
           Agregar Producto
         </Button>
         <Tabla
           headers={headers}
           data={data}
           onDelete={handleDelete}
-          onNavigateEdit={"/actualizar/"}
+          onNavigateEdit={"actualizar/"}
         />
       </Box>
     </Center>

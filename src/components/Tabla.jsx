@@ -47,7 +47,7 @@ const Tabla = ({ headers, data, onDelete, onNavigateEdit }) => {
   });
 
   return (
-    <TableContainer>
+    <TableContainer mb={10}>
       <Table variant="simple" size="md">
         <Thead>
           <Tr>
@@ -88,7 +88,8 @@ const Tabla = ({ headers, data, onDelete, onNavigateEdit }) => {
       </Table>
       {/* Controles de paginación */}
       <IconButton
-        colorScheme="teal"
+        bg="purple.800"
+        _hover={"none"}
         icon={<ChevronLeftIcon />}
         onClick={prevPage}
         disabled={currentPage === 1}
@@ -96,7 +97,8 @@ const Tabla = ({ headers, data, onDelete, onNavigateEdit }) => {
         mr={2}
       />
       <IconButton
-        colorScheme="teal"
+        bg="purple.800"
+        _hover={"none"}
         icon={<ChevronRightIcon />}
         onClick={nextPage}
         disabled={currentPage === totalPages}
