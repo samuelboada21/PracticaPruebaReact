@@ -55,6 +55,7 @@ const ProductosList = () => {
           data={data}
           onDelete={handleDelete}
           onNavigateEdit={"actualizar/"}
+          onNavigateDetails={"detailsProducto/"}
         />
       </Box>
     </Center>

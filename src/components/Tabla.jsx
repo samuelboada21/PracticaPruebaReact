@@ -13,12 +13,13 @@ import {
 import {
   EditIcon,
   DeleteIcon,
+  ViewIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 
-const Tabla = ({ headers, data, onDelete, onNavigateEdit }) => {
+const Tabla = ({ headers, data, onDelete, onNavigateEdit, onNavigateDetails }) => {
   const navigate = useNavigate();
   const itemsPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,13 +32,13 @@ const Tabla = ({ headers, data, onDelete, onNavigateEdit }) => {
   const totalPages = Math.ceil(data.length / itemsPage);
 
   const nextPage = () => {
-    if (currentPage != totalPages) {
+    if (currentPage !== totalPages) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
 
   const prevPage = () => {
-    if (currentPage != 1) {
+    if (currentPage !== 1) {
       setCurrentPage((prevPage) => prevPage - 1);
     }
   };
@@ -80,6 +81,13 @@ const Tabla = ({ headers, data, onDelete, onNavigateEdit }) => {
                   _hover={{ bgColor: "red.500" }}
                   ml={2}
                   onClick={() => onDelete(row[0])}
+                />
+                <IconButton
+                  icon={<ViewIcon />}
+                  bgColor={"purple.400"}
+                  _hover={{ bgColor: "purple.500" }}
+                  ml={2}
+                  onClick={() => navigate(`${onNavigateDetails}${row[0]}`)}
                 />
               </Td>
             </Tr>

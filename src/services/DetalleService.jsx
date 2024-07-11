@@ -1,5 +1,5 @@
 
-const API_URL = '/api/detalles';
+const API_URL = '/api/details';
 
 export const listarDetalles = async () => {
   try {
@@ -14,7 +14,7 @@ export const listarDetalles = async () => {
 
 export const listarDetallesFactura = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/factura/${id}`);
+    const response = await fetch(`${API_URL}/facturas/${id}`);
     if (!response.ok) throw new Error('Error al listar los detalles de la factura');
     return await response.json();
   } catch (error) {

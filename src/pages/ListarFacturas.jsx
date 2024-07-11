@@ -64,6 +64,7 @@ const FacturasList = () => {
           data={data}
           onDelete={handleDelete}
           onNavigateEdit={"actualizar/"}
+          onNavigateDetails={"detailsFactura/"}
         />
       </Box>
     </Center>

@@ -12,13 +12,13 @@ export const listarFacturas = async () => {
   }
 };
 
-export const crearFactura = async (factura) => {
+export const crearFactura = async (facturaData) => {
   const response = await fetch(`${API_URL}/create`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(factura),
+    body: JSON.stringify(facturaData),
   });
 
   if (!response.ok) {
@@ -26,7 +26,7 @@ export const crearFactura = async (factura) => {
   }
 
   const data = await response.json();
-  return data.id; // Asegúrate de que el backend devuelva el ID de la factura creada
+  return data.id;
 };
 
 export const actualizarFactura = async (id, factura) => {
