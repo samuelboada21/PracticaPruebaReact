@@ -5,6 +5,7 @@ import ListarFacturas from "../pages/ListarFacturas";
 import VerProducto from "../pages/VerProducto";
 import VerFactura from "../pages/VerFactura";
 import AgregarFactura from "../pages/AgregarFactura";
+import ActualizarFactura from "../pages/ActualizarFactura";
 import Navbar from "../components/NavBar";
 
 export default function AppRouter() {
@@ -22,7 +23,7 @@ export default function AppRouter() {
           <Route path="/facturas">
             <Route index element={<ListarFacturas />} />
             <Route path="agregar" element={<AgregarFactura />} />
-            <Route path="actualizar/:id" element={<AgregarFactura />} />
+            <Route path="actualizar/:id" element={<ActualizarFactura />} />
             <Route path="detailsFactura/:id" element={<VerFactura />} />
           </Route>
         </Routes>

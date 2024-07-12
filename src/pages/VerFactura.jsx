@@ -60,10 +60,13 @@ const VerFactura = () => {
             Fecha: {new Date(factura.fecha).toLocaleDateString()}
           </Text>
           <Text fontSize="lg" mt={2}>
+            Subtotal: {factura.subtotal.toFixed(2)}
+          </Text>
+          <Text fontSize="lg" mt={2}>
             IVA: {factura.iva}
           </Text>
           <Text fontSize="lg" mt={2}>
-            Total: {factura.total}
+            Total: {factura.total.toFixed(2)}
           </Text>
 
           <Text fontSize="xl" fontWeight="bold" mt={4}>

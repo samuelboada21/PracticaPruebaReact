@@ -45,7 +45,7 @@ const FacturasList = () => {
     factura.nombreCliente,
     factura.fecha,
     factura.iva,
-    factura.total
+    factura.total.toFixed(2)
   ]);
 
   return (

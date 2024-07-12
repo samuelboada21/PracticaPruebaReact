@@ -1,10 +1,9 @@
-
-const API_URL = '/api/details';
+const API_URL = "/api/details";
 
 export const listarDetalles = async () => {
   try {
     const response = await fetch(API_URL);
-    if (!response.ok) throw new Error('Error al listar los detalles');
+    if (!response.ok) throw new Error("Error al listar los detalles");
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -15,7 +14,8 @@ export const listarDetalles = async () => {
 export const listarDetallesFactura = async (id) => {
   try {
     const response = await fetch(`${API_URL}/facturas/${id}`);
-    if (!response.ok) throw new Error('Error al listar los detalles de la factura');
+    if (!response.ok)
+      throw new Error("Error al listar los detalles de la factura");
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -23,34 +23,40 @@ export const listarDetallesFactura = async (id) => {
   }
 };
 
-export const crearDetalle = async (detalle) => {
+export const crearDetalle = async (idFactura, detalle) => {
   try {
-    const response = await fetch(`${API_URL}/create`, {
-      method: 'POST',
+    const response = await fetch(`${API_URL}/create?idFactura=${idFactura}`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(detalle),
     });
-    if (!response.ok) throw new Error('Error al crear el detalle');
+    if (!response.ok) throw new Error("Error al crear el detalle");
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-export const actualizarDetalle = async (id, detalle) => {
+export const actualizarDetalle = async (id, detalleData, idFactura) => {
   try {
-    const response = await fetch(`${API_URL}/update/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(detalle),
-    });
-    if (!response.ok) throw new Error('Error al actualizar los detalles');
+    const response = await fetch(
+      `/api/details/update/${id}?idFactura=${idFactura}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(detalleData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al actualizar los detalles");
+    }
   } catch (error) {
-    console.error(error);
+    console.error("Error:", error);
     throw error;
   }
 };
@@ -58,9 +64,9 @@ export const actualizarDetalle = async (id, detalle) => {
 export const eliminarDetalle = async (id) => {
   try {
     const response = await fetch(`${API_URL}/delete/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
-    if (!response.ok) throw new Error('Error al eliminar los detalles');
+    if (!response.ok) throw new Error("Error al eliminar los detalles");
   } catch (error) {
     console.error(error);
     throw error;

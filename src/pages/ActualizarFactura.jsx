@@ -9,18 +9,26 @@ import {
   HStack,
   Text,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { crearFactura } from "../services/FacturaService";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  obtenerFacturaPorId,
+  actualizarFactura,
+} from "../services/FacturaService";
 import { listarProductos } from "../services/ProductoService";
+import {
+  listarDetallesFactura,
+  actualizarDetalle,
+  eliminarDetalle,
+  crearDetalle,
+} from "../services/DetalleService";
 
-const AgregarFactura = () => {
+const ActualizarFactura = () => {
   const [nombreCliente, setNombreCliente] = useState("");
   const [iva, setIva] = useState("");
   const [productos, setProductos] = useState([]);
-  const [detalles, setDetalles] = useState([
-    { producto: "", cantidad: "", valor: "" },
-  ]);
+  const [detalles, setDetalles] = useState([]);
   const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -32,10 +40,57 @@ const AgregarFactura = () => {
       }
     };
     fetchProductos();
-  }, []);
+
+    if (id) {
+      const fetchFactura = async () => {
+        try {
+          const factura = await obtenerFacturaPorId(id);
+          setNombreCliente(factura.nombreCliente);
+          setIva(factura.iva);
+        } catch (error) {
+          console.error("Error al obtener factura:", error);
+        }
+      };
+      fetchFactura();
+
+      const fetchDetalles = async () => {
+        try {
+          const detallesData = await listarDetallesFactura(id);
+          const detallesFactura = detallesData.map((detalle) => ({
+            id: detalle.id,
+            producto: detalle.producto.id.toString(),
+            cantidad: detalle.cantidad.toString(),
+            valor: detalle.valor.toFixed(2),
+          }));
+          setDetalles(detallesFactura);
+        } catch (error) {
+          console.error("Error al obtener detalles de la factura:", error);
+        }
+      };
+      fetchDetalles();
+    }
+  }, [id]);
 
   const handleAgregarDetalle = () => {
-    setDetalles([...detalles, { producto: "", cantidad: "", valor: "" }]);
+    setDetalles([...detalles, { cantidad: "", valor: "", producto: "" }]);
+  };
+
+  const handleEliminarDetalle = (index) => {
+    const updatedDetalles = [...detalles];
+    const detalle = updatedDetalles[index];
+    if (detalle.id) {
+      eliminarDetalle(detalle.id)
+        .then(() => {
+          updatedDetalles.splice(index, 1);
+          setDetalles(updatedDetalles);
+        })
+        .catch((error) => {
+          console.error("Error al eliminar detalle:", error);
+        });
+    } else {
+      updatedDetalles.splice(index, 1);
+      setDetalles(updatedDetalles);
+    }
   };
 
   const handleChangeDetalle = (index, field, value) => {
@@ -56,12 +111,6 @@ const AgregarFactura = () => {
     setDetalles(updatedDetalles);
   };
 
-  const handleEliminarDetalle = (index) => {
-    const updatedDetalles = [...detalles];
-    updatedDetalles.splice(index, 1);
-    setDetalles(updatedDetalles);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const today = new Date().toISOString().split("T")[0];
@@ -72,28 +121,36 @@ const AgregarFactura = () => {
     const total = subtotal + (subtotal * parseFloat(iva)) / 100;
 
     const facturaData = {
-      factura: {
-        nombreCliente,
-        fecha: today,
-        subtotal,
-        iva: parseFloat(iva),
-        total,
-      },
-      detalles: detalles.map((detalle) => ({
-        cantidad: parseInt(detalle.cantidad),
-        valor: parseFloat(detalle.valor),
-        producto: {
-          id: parseInt(detalle.producto),
-        },
-      })),
+      nombreCliente,
+      fecha: today,
+      subtotal,
+      iva: parseFloat(iva),
+      total,
     };
 
     try {
-      await crearFactura(facturaData);
-      alert("Factura creada con éxito");
+      await actualizarFactura(id, facturaData);
+
+      for (const detalle of detalles) {
+        const detalleData = {
+          cantidad: parseInt(detalle.cantidad),
+          valor: parseFloat(detalle.valor),
+          producto: {
+            id: parseInt(detalle.producto),
+          },
+        };
+
+        if (detalle.id) {
+          await actualizarDetalle(detalle.id, detalleData, id);
+        } else {
+          await crearDetalle(id, detalleData);
+        }
+      }
+
+      alert("Factura actualizada con éxito");
       navigate("/facturas");
     } catch (error) {
-      alert("Error al crear factura");
+      alert("Error al actualizar factura");
       console.error("Error:", error);
     }
   };
@@ -242,10 +299,10 @@ const AgregarFactura = () => {
       </Button>
 
       <Button mt={4} type="submit" colorScheme="teal" w="full">
-        Crear Factura
+        Actualizar Factura
       </Button>
     </Box>
   );
 };
 
-export default AgregarFactura;
+export default ActualizarFactura;
